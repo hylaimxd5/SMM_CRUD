@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+	<!-- Spring MVC配置文件 处理请求映射        注册controller  配置视图解析器-->
+	<!--2.1、扫描业务逻辑组件 配置扫描器 注解式使用 只扫描Controller -->
+	<context:component-scan base-package="com.hcrud.controller" />
+	<!--2.2、配置视图解析器 -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<!-- 前缀 -->
+		<property name="prefix" value="/WEB-INF/views/" />
+		<!-- 后缀 -->
+		<property name="suffix" value=".jsp" />
+	</bean>
+	<!-- 两个标准配置 -->
+	<!-- 对请求进行筛选，没有添加Controller映射的， 交给tomcat DefaultServlet处理 ，比如静态资源图片等 就可以直接访问了 -->
+	<mvc:default-servlet-handler />
+
+	<!-- 配置注解驱动 映射动态请求 支持springmvc一些高级功能，比如JSR303校验，快捷AJAX请求 、映射动态请求 -->
+	<mvc:annotation-driven />
+	
+	<!-- 自定义拦截去 登录验证handlerintercetor -->
+	<!-- <mvc:interceptors>
+		<bean class="com.hcrud.bean.LoginHandlerInterCeptor" />
+	</mvc:interceptors> -->
+	
+	<!-- 自定义拦截器 单个拦截//handler映射请求 -->
+ 	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/handler"/>
+			<bean class="com.hcrud.bean.LoginHandlerInterCeptor"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors> 
+	
+	
+</beans>
